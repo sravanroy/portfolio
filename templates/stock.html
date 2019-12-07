@@ -1,0 +1,279 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/stock.jpeg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                    <h1 class="centered" style="color: white !important;"><strong>STOCK MARKET CLUSTERING</strong></h1>
+                 </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+        
+                <ul>
+                        <li><h4>The stock market data is prepared by picking few comapanies data from reliable data source such as yahoo/morningstar</h4></li>
+                        <li><h4>K-Means is implemented before and after performing PCA on the stock data</h4></li>
+                        <li><h4>The models were implemented in Python Jupyter notebook</h4></li>
+                      </ul>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pandas_datareader</span> <span class="kn">import</span> <span class="n">data</span>
+                      <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                      <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+                      <span class="kn">import</span> <span class="nn">datetime</span>
+                      <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+                      </code></pre></div></div>
+                      <p>Define the instruments to download. We would like to see Apple, Microsoft and others.</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">companies_dict</span> <span class="o">=</span> <span class="p">{</span>
+                      <span class="s">'Amazon'</span><span class="p">:</span> <span class="s">'AMZN'</span><span class="p">,</span>
+                      <span class="s">'Apple'</span><span class="p">:</span> <span class="s">'AAPL'</span><span class="p">,</span>
+                      <span class="s">'Walgreen'</span><span class="p">:</span> <span class="s">'WBA'</span><span class="p">,</span>
+                      <span class="s">'Northrop Grumman'</span><span class="p">:</span> <span class="s">'NOC'</span><span class="p">,</span>
+                      <span class="s">'Boeing'</span><span class="p">:</span> <span class="s">'BA'</span><span class="p">,</span>
+                      <span class="s">'Lockheed Martin'</span><span class="p">:</span> <span class="s">'LMT'</span><span class="p">,</span>
+                      <span class="s">'McDonalds'</span><span class="p">:</span> <span class="s">'MCD'</span><span class="p">,</span>
+                      <span class="s">'Intel'</span><span class="p">:</span> <span class="s">'INTC'</span><span class="p">,</span>
+                      <span class="s">'Navistar'</span><span class="p">:</span> <span class="s">'NAV'</span><span class="p">,</span>  
+                      <span class="s">'IBM'</span><span class="p">:</span> <span class="s">'IBM'</span><span class="p">,</span>
+                      <span class="s">'Texas Instruments'</span><span class="p">:</span> <span class="s">'TXN'</span><span class="p">,</span>
+                      <span class="s">'MasterCard'</span><span class="p">:</span> <span class="s">'MA'</span><span class="p">,</span>
+                      <span class="s">'Microsoft'</span><span class="p">:</span> <span class="s">'MSFT'</span><span class="p">,</span>
+                      <span class="s">'General Electrics'</span><span class="p">:</span> <span class="s">'GE'</span><span class="p">,</span>
+                      <span class="s">'Symantec'</span><span class="p">:</span> <span class="s">'SYMC'</span><span class="p">,</span>
+                      <span class="s">'American Express'</span><span class="p">:</span> <span class="s">'AXP'</span><span class="p">,</span>
+                      <span class="s">'Pepsi'</span><span class="p">:</span> <span class="s">'PEP'</span><span class="p">,</span>
+                      <span class="s">'Coca Cola'</span><span class="p">:</span> <span class="s">'KO'</span><span class="p">,</span>
+                      <span class="s">'Johnson &amp; Johnson'</span><span class="p">:</span> <span class="s">'JNJ'</span><span class="p">,</span>
+                      <span class="s">'Toyota'</span><span class="p">:</span> <span class="s">'TM'</span><span class="p">,</span>
+                      <span class="s">'Honda'</span><span class="p">:</span> <span class="s">'HMC'</span><span class="p">,</span>
+                      <span class="s">'Mitsubishi'</span><span class="p">:</span> <span class="s">'MSBHY'</span><span class="p">,</span>
+                      <span class="s">'Sony'</span><span class="p">:</span> <span class="s">'SNE'</span><span class="p">,</span>
+                      <span class="s">'Exxon'</span><span class="p">:</span> <span class="s">'XOM'</span><span class="p">,</span>
+                      <span class="s">'Chevron'</span><span class="p">:</span> <span class="s">'CVX'</span><span class="p">,</span>
+                      <span class="s">'Valero Energy'</span><span class="p">:</span> <span class="s">'VLO'</span><span class="p">,</span>
+                      <span class="s">'Ford'</span><span class="p">:</span> <span class="s">'F'</span><span class="p">,</span>
+                      <span class="s">'Bank of America'</span><span class="p">:</span> <span class="s">'BAC'</span><span class="p">}</span>
+                      
+                      <span class="n">companies</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">companies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                      <span class="c1">#print(companies)
+                      </span>
+                      <span class="c1"># Define which online source one should use
+                      </span><span class="n">data_source</span> <span class="o">=</span> <span class="s">'morningstar'</span>
+                      
+                      <span class="c1"># Define the start and end dates that we want to see
+                      </span><span class="n">start_date</span> <span class="o">=</span> <span class="s">'2015-01-01'</span>
+                      <span class="n">end_date</span> <span class="o">=</span> <span class="s">'2017-12-31'</span>
+                      
+                      <span class="c1"># User pandas_reader.data.DataReader to load the desired data. As simple as that.
+                      </span><span class="n">panel_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">DataReader</span><span class="p">(</span><span class="n">companies_dict</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">data_source</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                      
+                      <span class="c1"># Print Axes Labels
+                      #print(panel_data.axes)
+                      </span>
+                      <span class="c1"># Find Stock Open and Close Values
+                      </span><span class="n">stock_close</span> <span class="o">=</span> <span class="n">panel_data</span><span class="p">[</span><span class="s">'Close'</span><span class="p">]</span>
+                      <span class="n">stock_open</span> <span class="o">=</span> <span class="n">panel_data</span><span class="p">[</span><span class="s">'Open'</span><span class="p">]</span>
+                      
+                      <span class="c1">#print(stock_close.iloc[0])
+                      #print(stock_open.iloc[0])
+                      </span></code></pre></div></div>
+                      
+                      <p>Calculate daily stock movement</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">stock_close</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stock_close</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                      <span class="n">stock_open</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stock_open</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                      
+                      <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">stock_close</span><span class="o">.</span><span class="n">shape</span>
+                      
+                      <span class="n">movements</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">])</span>
+                      
+                      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+                          <span class="n">movements</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">stock_close</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">stock_open</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span>
+                      
+                      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">companies</span><span class="p">)):</span>
+                         <span class="k">print</span><span class="p">(</span><span class="s">'Company: {}, Change: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">sum</span><span class="p">(</span><span class="n">movements</span><span class="p">[</span><span class="n">i</span><span class="p">][:])))</span>
+                          
+                      <span class="c1"># print(movements.shape)
+                      </span></code></pre></div></div>
+                      
+                      <p>Normalize the stock data to scale the changes in the stock movements evenly across all companies</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import Normalizer
+                      </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">Normalizer</span>
+                      <span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+                      <span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+                      
+                      <span class="c1"># Create a normalizer: normalizer
+                      </span><span class="n">normalizer</span> <span class="o">=</span> <span class="n">Normalizer</span><span class="p">()</span>
+                      <span class="n">new</span> <span class="o">=</span> <span class="n">normalizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">movements</span><span class="p">)</span>
+                      
+                      <span class="c1">#print(new.max())
+                      #print(new.min())
+                      #print(new.mean())
+                      </span></code></pre></div></div>
+                      <p>Building the pipeline</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Normalizer for use in pipeline
+                      </span><span class="n">normalizer</span> <span class="o">=</span> <span class="n">Normalizer</span><span class="p">()</span>
+                      
+                      <span class="c1"># Create a KMeans model with 10 clusters: kmeans
+                      </span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+                      
+                      <span class="c1"># Make a pipeline chaining normalizer and kmeans: pipeline
+                      </span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">normalizer</span><span class="p">,</span> <span class="n">kmeans</span><span class="p">)</span>
+                      
+                      <span class="c1"># Fit pipeline to the daily price movements
+                      </span><span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">movements</span><span class="p">)</span>
+                      
+                      <span class="c1">#print(kmeans.inertia_)
+                      </span></code></pre></div></div>
+                      <p>Predict the labels</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import pandas
+                      </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+                      
+                      <span class="c1"># Predict the cluster labels: labels
+                      </span><span class="n">labels</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">movements</span><span class="p">)</span>
+                      
+                      <span class="c1"># Create a DataFrame aligning labels and companies: df
+                      </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">'labels'</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s">'companies'</span><span class="p">:</span> <span class="n">companies</span><span class="p">})</span>
+                      
+                      <span class="c1"># Display df sorted by cluster label
+                      </span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s">'labels'</span><span class="p">))</span>
+                      </code></pre></div></div>
+                      <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    companies  labels 13    (Lockheed Martin, LMT)       0 3               (Boeing, BA)       0 19   (Northrop Grumman, NOC)       0 23              (Toyota, TM)       1 21               (Sony, SNE)       1 6                  (Ford, F)       1 7    (General Electrics, GE)       1 8               (Honda, HMC)       1 16       (Mitsubishi, MSBHY)       1 24  (Texas Instruments, TXN)       2 22          (Symantec, SYMC)       2 17         (Microsoft, MSFT)       2 14          (MasterCard, MA)       2 0              (Apple, AAPL)       2 10             (Intel, INTC)       2 9                 (IBM, IBM)       2 1             (Amazon, AMZN)       2 12           (Coca Cola, KO)       3 20              (Pepsi, PEP)       3 15          (McDonalds, MCD)       4 11  (Johnson &amp; Johnson, JNJ)       4 18           (Navistar, NAV)       5 5             (Chevron, CVX)       6 27              (Exxon, XOM)       6 4     (Bank of America, BAC)       7 2    (American Express, AXP)       7 26           (Walgreen, WBA)       8 25      (Valero Energy, VLO)       9
+                      </code></pre></div></div>
+                      
+                      <div  class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Visualization - Plot Stock Movements
+                      </span><span class="n">plt</span><span class="o">.</span><span class="n">clf</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+                      <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new</span><span class="p">[</span><span class="mi">19</span><span class="p">][:])</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="mi">19</span><span class="p">])</span>
+                      
+                      <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new</span><span class="p">[</span><span class="mi">13</span><span class="p">][:])</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                      </code></pre></div></div>
+                      <p style = "overflow-x: scroll;"><img src="https://sravanroy.github.io/images/stock_cluster/stock.png" alt="alt"></p>
+                      
+                      <p>Now, perform PCA on the stock data</p>
+                      
+                      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+                      
+                      <span class="c1"># Visualize the results on PCA-reduced data
+                      # Principal component analysis (PCA)
+                      # Linear dimensionality reduction using Singular Value Decomposition of the data to project it to a lower dimensional space
+                      </span>
+                      <span class="n">reduced_data</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+                      <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s">'k-means++'</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+                      <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">)</span>
+                      <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">)</span>
+                      
+                      <span class="c1"># Create a DataFrame aligning labels and companies: df
+                      </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">'labels'</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s">'companies'</span><span class="p">:</span> <span class="n">companies</span><span class="p">})</span>
+                      
+                      <span class="c1"># Display df sorted by cluster label
+                      </span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s">'labels'</span><span class="p">))</span>
+                      
+                      <span class="c1"># Step size of the mesh. Decrease to increase the quality of the VQ.
+                      </span><span class="n">h</span> <span class="o">=</span> <span class="mf">.01</span>     <span class="c1"># point in the mesh [x_min, x_max]x[y_min, y_max].
+                      </span>
+                      <span class="c1"># Plot the decision boundary. For that, we will assign a color to each
+                      </span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nb">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+                      <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="nb">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+                      <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+                      
+                      <span class="c1"># Obtain labels for each point in mesh. Use last trained model.
+                      </span><span class="n">Z</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+                      
+                      <span class="c1"># Put the result into a color plot
+                      </span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                      
+                      <span class="c1"># Define Colormap
+                      </span><span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span>
+                      
+                      <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s">'nearest'</span><span class="p">,</span>
+                                 <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">xx</span><span class="o">.</span><span class="nb">max</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="nb">max</span><span class="p">()),</span>
+                                 <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                                 <span class="n">aspect</span><span class="o">=</span><span class="s">'auto'</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s">'lower'</span><span class="p">)</span>
+                      
+                      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">reduced_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">'k.'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+                      <span class="c1"># Plot the centroids as a white X
+                      </span><span class="n">centroids</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">centroids</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">centroids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                                  <span class="n">marker</span><span class="o">=</span><span class="s">'x'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">169</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                  <span class="n">color</span><span class="o">=</span><span class="s">'w'</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'K-means clustering on Stock Market Movements (PCA-reduced data)</span><span class="se">\n</span><span class="s">'</span>
+                                <span class="s">'Centroids are marked with white cross'</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+                      <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                      </code></pre></div></div>
+                      <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               companies  labels 3               (Boeing, BA)       0 26           (Walgreen, WBA)       0 25      (Valero Energy, VLO)       1 2    (American Express, AXP)       1 23              (Toyota, TM)       1 8               (Honda, HMC)       1 0              (Apple, AAPL)       2 24  (Texas Instruments, TXN)       2 22          (Symantec, SYMC)       2 14          (MasterCard, MA)       2 20              (Pepsi, PEP)       3 19   (Northrop Grumman, NOC)       3 13    (Lockheed Martin, LMT)       3 11  (Johnson &amp; Johnson, JNJ)       3 12           (Coca Cola, KO)       3 7    (General Electrics, GE)       4 5             (Chevron, CVX)       4 27              (Exxon, XOM)       4 18           (Navistar, NAV)       5 6                  (Ford, F)       5 4     (Bank of America, BAC)       5 16       (Mitsubishi, MSBHY)       6 9                 (IBM, IBM)       6 17         (Microsoft, MSFT)       7 1             (Amazon, AMZN)       7 10             (Intel, INTC)       8 21               (Sony, SNE)       8 15          (McDonalds, MCD)       9
+                      </code></pre></div></div>
+                      
+                      <p><img src="https://sravanroy.github.io/images/stock_cluster/pca.png" alt="alt"></p>
+                      
+                      <p><em>Even though it’s clustered badly after PCA, the dimensions have been reduced to be visualised in a 2D PCA plot</em></p>
+                      
+                      
+                              
+                            
+        </div>
+    </section>
+ 
+    
+{% endblock %}

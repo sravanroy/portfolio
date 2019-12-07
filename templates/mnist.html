@@ -1,0 +1,141 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/mnist3.jpeg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                   <h1 class="centered" style="color: white !important;"><strong>PREDICTING THE DIGITS IN MINST DATABASE</strong></h1>
+                </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+
+                <h2 id="simple-prediction-of-digits-using-pandas-and-tensorflow-"><em>Simple prediction of digits using Pandas and TensorFlow !</em></h2>
+    
+                <ul>
+                  <h4><li>A basic model to predict the handwritten images in MNIST database</li></h4>
+                  <h4><li>TensorFlow API is implemented to achieve this purpose</li></h4>
+                </ul>
+                
+                <p>The required packages are imported into the notebook as shown-</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+                <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+                </code></pre></div></div>
+                <p>The MNIST dataset is loaded from Keras library and unpacked to training and testing variables</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">mnist</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span> <span class="c1">#data base containing hand-written digits 0-9
+                </span>
+                <span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+                </code></pre></div></div>
+                <p>A sample image of digit in the training dataset</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+                </code></pre></div></div>
+                <p><img src="https://sravanroy.github.io/images/number_prediction/download.png" alt="alt"></p>
+                
+                <p>Choosing and training the model</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1"># normalizing the data to make the neural ntwork easier to learn
+                </span><span class="n">x_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">x_test</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                
+                <span class="c1">#choosing the sequential model
+                </span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+                
+                <span class="c1">#defining the architecture of the model
+                </span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">))</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">))</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">))</span>
+                
+                <span class="c1">#defining the parameters to train the model
+                </span><span class="n">model</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s">'sparse_categorical_crossentropy'</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+                
+                <span class="c1">#training the model
+                </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+                
+                <span class="n">Epoch</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+                <span class="mi">60000</span><span class="o">/</span><span class="mi">60000</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">7</span><span class="n">s</span> <span class="mi">123</span><span class="n">us</span><span class="o">/</span><span class="n">step</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.2671</span> <span class="o">-</span> <span class="n">acc</span><span class="p">:</span> <span class="mf">0.9223</span>
+                <span class="n">Epoch</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
+                <span class="mi">60000</span><span class="o">/</span><span class="mi">60000</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span><span class="n">s</span> <span class="mi">165</span><span class="n">us</span><span class="o">/</span><span class="n">step</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.1088</span> <span class="o">-</span> <span class="n">acc</span><span class="p">:</span> <span class="mf">0.9668</span>
+                <span class="n">Epoch</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span>
+                <span class="mi">60000</span><span class="o">/</span><span class="mi">60000</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span><span class="n">s</span> <span class="mi">167</span><span class="n">us</span><span class="o">/</span><span class="n">step</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">0.0725</span> <span class="o">-</span> <span class="n">acc</span><span class="p">:</span> <span class="mf">0.9770</span>
+                </code></pre></div></div>
+                <p>Calculating the validation loss</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">val_loss</span><span class="p">,</span> <span class="n">val_acc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">val_loss</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">)</span>
+                
+                <span class="mi">10000</span><span class="o">/</span><span class="mi">10000</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">0</span><span class="n">s</span> <span class="mi">43</span><span class="n">us</span><span class="o">/</span><span class="n">step</span>
+                <span class="mf">0.1025834274851717</span> <span class="mf">0.9694</span>
+                </code></pre></div></div>
+                <p>Saving and loading the model</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#saving the model
+                </span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">"num_reader.model"</span><span class="p">)</span>
+                <span class="c1">#load the model
+                </span><span class="n">new_model</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s">"num_reader.model"</span><span class="p">)</span>
+                </code></pre></div></div>
+                <p>Predicting digits using the model</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">predictions</span> <span class="o">=</span> <span class="n">new_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">x_test</span><span class="p">])</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+                <span class="c1">#prediction for first element in x_test is
+                </span><span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="mi">7</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                <p><img src="https://sravanroy.github.io/images/number_prediction/download7.png" alt="alt"></p>
+                
+                <p><em>This is a basic walkthrough for building and predicting images from a model</em>
+                <em>The parameters for fitting the model can be flexible, with a wide range of loss functions and optimizers to experiment with!</em></p>
+            
+        </div>
+    </section>
+{% endblock %}

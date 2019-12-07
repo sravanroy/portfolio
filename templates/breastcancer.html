@@ -1,0 +1,261 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/breastcancer.jpeg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                    <h1 class="centered" style="color: white !important;"><strong>BREAST CANCER PREDICTION</strong></h1>
+                </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+
+                <h2 id="implementation-of-clustering-algorithms-to-predict-breast-cancer-"><em>Implementation of clustering algorithms to predict breast cancer !</em></h2>
+                <ul>
+                  <li><h4>The dataset is retrieved directly from uci repository</li>
+                  <li><h4>SVM and KNN models were deployed to predict the cancer class as malign or benign</h4></li>
+                  <li><h4>The models were implemented in Python Jupyter notebook</h4></li>
+                </ul>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load all the required libraries
+                </span>
+                <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+                <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span><span class="p">,</span> <span class="n">cross_validation</span>
+                <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+                <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+                <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+                <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span>
+                <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+                <span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">scatter_matrix</span>
+                <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+                </code></pre></div></div>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load Dataset
+                </span><span class="n">url</span> <span class="o">=</span> <span class="s">"https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data"</span>
+                
+                <span class="c1"># get the column names of the dataset
+                </span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">'id'</span><span class="p">,</span> <span class="s">'clump_thickness'</span><span class="p">,</span> <span class="s">'uniform_cell_size'</span><span class="p">,</span> <span class="s">'uniform_cell_shape'</span><span class="p">,</span>
+                       <span class="s">'marginal_adhesion'</span><span class="p">,</span> <span class="s">'single_epithelial_size'</span><span class="p">,</span> <span class="s">'bare_nuclei'</span><span class="p">,</span>
+                       <span class="s">'bland_chromatin'</span><span class="p">,</span> <span class="s">'normal_nucleoli'</span><span class="p">,</span> <span class="s">'mitoses'</span><span class="p">,</span> <span class="s">'class'</span><span class="p">]</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+                </code></pre></div></div>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Preprocess the data
+                </span>
+                <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'?'</span><span class="p">,</span><span class="o">-</span><span class="mi">99999</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># ignore the blank data
+                </span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">axes</span><span class="p">)</span>
+                
+                <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'id'</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                </code></pre></div></div>
+                
+                <p>Lets look at the data in columns</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span> <span class="c1"># looking at the 10th row
+                </span>
+                <span class="c1"># Print the shape of the dataset
+                </span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                
+                <span class="n">clump_thickness</span>           <span class="mi">1</span>
+                <span class="n">uniform_cell_size</span>         <span class="mi">1</span>
+                <span class="n">uniform_cell_shape</span>        <span class="mi">1</span>
+                <span class="n">marginal_adhesion</span>         <span class="mi">1</span>
+                <span class="n">single_epithelial_size</span>    <span class="mi">1</span>
+                <span class="n">bare_nuclei</span>               <span class="mi">1</span>
+                <span class="n">bland_chromatin</span>           <span class="mi">3</span>
+                <span class="n">normal_nucleoli</span>           <span class="mi">1</span>
+                <span class="n">mitoses</span>                   <span class="mi">1</span>
+                <span class="k">class</span>                     <span class="err">2
+                </span><span class="nc">Name</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+                <span class="p">(</span><span class="mi">699</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+                </code></pre></div></div>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Describe the dataset
+                </span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+                
+                 <span class="n">clump_thickness</span>  <span class="n">uniform_cell_size</span>  <span class="n">uniform_cell_shape</span>  \
+                <span class="n">count</span>       <span class="mf">699.000000</span>         <span class="mf">699.000000</span>          <span class="mf">699.000000</span>   
+                <span class="n">mean</span>          <span class="mf">4.417740</span>           <span class="mf">3.134478</span>            <span class="mf">3.207439</span>   
+                <span class="n">std</span>           <span class="mf">2.815741</span>           <span class="mf">3.051459</span>            <span class="mf">2.971913</span>   
+                <span class="nb">min</span>           <span class="mf">1.000000</span>           <span class="mf">1.000000</span>            <span class="mf">1.000000</span>   
+                <span class="mi">25</span><span class="o">%</span>           <span class="mf">2.000000</span>           <span class="mf">1.000000</span>            <span class="mf">1.000000</span>   
+                <span class="mi">50</span><span class="o">%</span>           <span class="mf">4.000000</span>           <span class="mf">1.000000</span>            <span class="mf">1.000000</span>   
+                <span class="mi">75</span><span class="o">%</span>           <span class="mf">6.000000</span>           <span class="mf">5.000000</span>            <span class="mf">5.000000</span>   
+                <span class="nb">max</span>          <span class="mf">10.000000</span>          <span class="mf">10.000000</span>           <span class="mf">10.000000</span>   
+                
+                       <span class="n">marginal_adhesion</span>  <span class="n">single_epithelial_size</span>  <span class="n">bland_chromatin</span>  \
+                <span class="n">count</span>         <span class="mf">699.000000</span>              <span class="mf">699.000000</span>       <span class="mf">699.000000</span>   
+                <span class="n">mean</span>            <span class="mf">2.806867</span>                <span class="mf">3.216023</span>         <span class="mf">3.437768</span>   
+                <span class="n">std</span>             <span class="mf">2.855379</span>                <span class="mf">2.214300</span>         <span class="mf">2.438364</span>   
+                <span class="nb">min</span>             <span class="mf">1.000000</span>                <span class="mf">1.000000</span>         <span class="mf">1.000000</span>   
+                <span class="mi">25</span><span class="o">%</span>             <span class="mf">1.000000</span>                <span class="mf">2.000000</span>         <span class="mf">2.000000</span>   
+                <span class="mi">50</span><span class="o">%</span>             <span class="mf">1.000000</span>                <span class="mf">2.000000</span>         <span class="mf">3.000000</span>   
+                <span class="mi">75</span><span class="o">%</span>             <span class="mf">4.000000</span>                <span class="mf">4.000000</span>         <span class="mf">5.000000</span>   
+                <span class="nb">max</span>            <span class="mf">10.000000</span>               <span class="mf">10.000000</span>        <span class="mf">10.000000</span>   
+                
+                       <span class="n">normal_nucleoli</span>     <span class="n">mitoses</span>       <span class="k">class</span>  
+                <span class="nc">count</span>       <span class="mf">699.000000</span>  <span class="mf">699.000000</span>  <span class="mf">699.000000</span>  
+                <span class="n">mean</span>          <span class="mf">2.866953</span>    <span class="mf">1.589413</span>    <span class="mf">2.689557</span>  
+                <span class="n">std</span>           <span class="mf">3.053634</span>    <span class="mf">1.715078</span>    <span class="mf">0.951273</span>  
+                <span class="nb">min</span>           <span class="mf">1.000000</span>    <span class="mf">1.000000</span>    <span class="mf">2.000000</span>  
+                <span class="mi">25</span><span class="o">%</span>           <span class="mf">1.000000</span>    <span class="mf">1.000000</span>    <span class="mf">2.000000</span>  
+                <span class="mi">50</span><span class="o">%</span>           <span class="mf">1.000000</span>    <span class="mf">1.000000</span>    <span class="mf">2.000000</span>  
+                <span class="mi">75</span><span class="o">%</span>           <span class="mf">4.000000</span>    <span class="mf">1.000000</span>    <span class="mf">4.000000</span>  
+                <span class="nb">max</span>          <span class="mf">10.000000</span>   <span class="mf">10.000000</span>    <span class="mf">4.000000</span>  
+                </code></pre></div></div>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Plot histograms for each variable
+                </span>
+                <span class="n">df</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                
+                <p style = "overflow-x: scroll;"><img src="https://sravanroy.github.io/images/breast_cancer/hist.png" alt="alt"></p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Create scatter plot matrix
+                </span>
+                <span class="n">scatter_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span> <span class="c1"># to see the relationship between the variables
+                </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                <p style = "overflow-x: scroll;"><img src="https://sravanroy.github.io/images/breast_cancer/scatter.png" alt="alt"></p>
+                
+                <p>We dont have any strong relationships with the cancer class and hence linear models won’t be a good fit</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Create X and Y datasets for training and store the rest for validating the model
+                </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'class'</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span> <span class="c1"># every variable except the class
+                </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'class'</span><span class="p">])</span> <span class="c1"># only the class label which is to be predicted
+                </span>
+                <span class="c1"># splitting the training and test data
+                </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+                
+                <span class="c1"># Testing Options
+                </span><span class="n">seed</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># to reproduce the same results
+                </span><span class="n">scoring</span> <span class="o">=</span> <span class="s">'accuracy'</span>
+                
+                <span class="c1"># Define models to train
+                </span>
+                <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s">'KNN'</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)))</span> <span class="c1"># add the KNN model with k=5
+                </span><span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s">'SVM'</span><span class="p">,</span> <span class="n">SVC</span><span class="p">()))</span> <span class="c1"># add the SVM model
+                </span>
+                <span class="c1"># evaluate each model in turn
+                </span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+                
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span> <span class="c1"># run  KFold 10 times on train data on both models to choose the best one
+                </span>    <span class="n">kfold</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+                    <span class="n">cv_results</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kfold</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cv_results</span><span class="p">)</span>
+                    <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s: </span><span class="si">%</span><span class="s">f (</span><span class="si">%</span><span class="s">f)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cv_results</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">cv_results</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    
+                    <span class="n">KNN</span><span class="p">:</span> <span class="mf">0.973117</span> <span class="p">(</span><span class="mf">0.018442</span><span class="p">)</span>
+                    <span class="n">SVM</span><span class="p">:</span> <span class="mf">0.951558</span> <span class="p">(</span><span class="mf">0.028352</span><span class="p">)</span>
+                </code></pre></div></div>
+                <p>This is the accuracy for training data for both the models</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Make predictions on validation dataset
+                </span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+                    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+                    
+                <span class="c1"># Accuracy - ratio of correctly predicted observations to the total observations. 
+                # Recall -  ratio of correctly predicted positive observations to the total predicted positive observations
+                # Precision - ratio of correctly predicted positive observations to the all observations in actual class - yes.
+                # F1 score - F1 Score is the weighted average of Precision and Recall. Therefore, this score takes both false positives and false 
+                </span>
+                <span class="n">KNN</span>
+                <span class="mf">0.9428571428571428</span>
+                             <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+                
+                          <span class="mi">2</span>       <span class="mf">0.94</span>      <span class="mf">0.96</span>      <span class="mf">0.95</span>        <span class="mi">83</span>
+                          <span class="mi">4</span>       <span class="mf">0.95</span>      <span class="mf">0.91</span>      <span class="mf">0.93</span>        <span class="mi">57</span>
+                
+                <span class="n">avg</span> <span class="o">/</span> <span class="n">total</span>       <span class="mf">0.94</span>      <span class="mf">0.94</span>      <span class="mf">0.94</span>       <span class="mi">140</span>
+                
+                <span class="n">SVM</span>
+                <span class="mf">0.9571428571428572</span>
+                             <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+                
+                          <span class="mi">2</span>       <span class="mf">1.00</span>      <span class="mf">0.93</span>      <span class="mf">0.96</span>        <span class="mi">83</span>
+                          <span class="mi">4</span>       <span class="mf">0.90</span>      <span class="mf">1.00</span>      <span class="mf">0.95</span>        <span class="mi">57</span>
+                
+                <span class="n">avg</span> <span class="o">/</span> <span class="n">total</span>       <span class="mf">0.96</span>      <span class="mf">0.96</span>      <span class="mf">0.96</span>       <span class="mi">140</span>
+                
+                <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+                
+                <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+                <span class="n">accuracy</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span>
+                
+                <span class="n">example_measures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span><span class="c1"># randomly assign values to the variables(columns)
+                </span><span class="n">example_measures</span> <span class="o">=</span> <span class="n">example_measures</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">example_measures</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">example_measures</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+                
+                <span class="mf">0.9571428571428572</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                </code></pre></div></div>
+                <p><em>The scope extends to using further clustering models in addition to KNN and SVM which might have a better accuracy of prediction</em></p>
+                
+                
+                        
+                      
+
+        </div>
+    </section>
+ 
+    
+{% endblock %}

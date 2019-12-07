@@ -1,0 +1,308 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/credit.jpg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                    <h1 class="centered" style="color: white !important;"><strong>CREDIT FRAUD DETECTION</strong></h1>
+                </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+
+
+                <h1 id="credit-fraud-detection">Credit Fraud Detection</h1>
+
+                <p>Throughout the financial sector, machine learning algorithms are being developed to detect fraudulent transactions. Using a dataset of of nearly 285K credit card transactions and multiple unsupervised anomaly detection algorithms, we are going to identify transactions with a high probability of being credit card fraud. We will build and deploy the following two machine learning algorithms:</p>
+                
+                <ul>
+                  <li>Local Outlier Factor (LOF)</li>
+                  <li>Isolation Forest Algorithm</li>
+                </ul>
+                
+                <p>Furthermore, using metrics such as precision, recall, and F1-scores, we will investigate why the classification accuracy for these algorithms can be misleading.</p>
+                
+                <p>In addition, we will explore the use of data visualization techniques common in data science, such as parameter histograms and correlation matrices, to gain a better understanding of the underlying distribution of data in our data set. 
+                The dataset used is “creditcard” data and can be downloaded from the kaggle website</p>
+                
+                <h2 id="1-importing-necessary-libraries">1. Importing Necessary Libraries</h2>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># import the necessary packages
+                </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+                <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+                <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+                </code></pre></div></div>
+                <h3 id="2-the-data-set">2. The Data Set</h3>
+                
+                <p>In the following cells, we will import our dataset from a .csv file as a Pandas DataFrame.  Furthermore, we will begin exploring the dataset to gain an understanding of the type, quantity, and distribution of data in our dataset.  For this purpose, we will use Pandas’ built-in describe feature, as well as parameter histograms and a correlation matrix.</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load the dataset from the csv file using pandas
+                </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'creditcard.csv'</span><span class="p">)</span>
+                <span class="c1"># Start exploring the dataset
+                </span><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+                
+                <span class="n">Index</span><span class="p">([</span><span class="s">'Time'</span><span class="p">,</span> <span class="s">'V1'</span><span class="p">,</span> <span class="s">'V2'</span><span class="p">,</span> <span class="s">'V3'</span><span class="p">,</span> <span class="s">'V4'</span><span class="p">,</span> <span class="s">'V5'</span><span class="p">,</span> <span class="s">'V6'</span><span class="p">,</span> <span class="s">'V7'</span><span class="p">,</span> <span class="s">'V8'</span><span class="p">,</span> <span class="s">'V9'</span><span class="p">,</span> <span class="s">'V10'</span><span class="p">,</span>
+                       <span class="s">'V11'</span><span class="p">,</span> <span class="s">'V12'</span><span class="p">,</span> <span class="s">'V13'</span><span class="p">,</span> <span class="s">'V14'</span><span class="p">,</span> <span class="s">'V15'</span><span class="p">,</span> <span class="s">'V16'</span><span class="p">,</span> <span class="s">'V17'</span><span class="p">,</span> <span class="s">'V18'</span><span class="p">,</span> <span class="s">'V19'</span><span class="p">,</span> <span class="s">'V20'</span><span class="p">,</span>
+                       <span class="s">'V21'</span><span class="p">,</span> <span class="s">'V22'</span><span class="p">,</span> <span class="s">'V23'</span><span class="p">,</span> <span class="s">'V24'</span><span class="p">,</span> <span class="s">'V25'</span><span class="p">,</span> <span class="s">'V26'</span><span class="p">,</span> <span class="s">'V27'</span><span class="p">,</span> <span class="s">'V28'</span><span class="p">,</span> <span class="s">'Amount'</span><span class="p">,</span>
+                       <span class="s">'Class'</span><span class="p">],</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="s">'object'</span><span class="p">)</span>
+                      
+                <span class="c1"># Print the shape of the data
+                </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+                
+                <span class="c1"># V1 - V28 are the results of a PCA Dimensionality reduction to protect user identities and sensitive features
+                </span>
+                <span class="p">(</span><span class="mi">28481</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+                                <span class="n">Time</span>            <span class="n">V1</span>            <span class="n">V2</span>            <span class="n">V3</span>            <span class="n">V4</span>  \
+                <span class="n">count</span>   <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>   
+                <span class="n">mean</span>    <span class="mf">94705.035216</span>     <span class="o">-</span><span class="mf">0.001143</span>     <span class="o">-</span><span class="mf">0.018290</span>      <span class="mf">0.000795</span>      <span class="mf">0.000350</span>   
+                <span class="n">std</span>     <span class="mf">47584.727034</span>      <span class="mf">1.994661</span>      <span class="mf">1.709050</span>      <span class="mf">1.522313</span>      <span class="mf">1.420003</span>   
+                <span class="nb">min</span>         <span class="mf">0.000000</span>    <span class="o">-</span><span class="mf">40.470142</span>    <span class="o">-</span><span class="mf">63.344698</span>    <span class="o">-</span><span class="mf">31.813586</span>     <span class="o">-</span><span class="mf">5.266509</span>   
+                <span class="mi">25</span><span class="o">%</span>     <span class="mf">53924.000000</span>     <span class="o">-</span><span class="mf">0.908809</span>     <span class="o">-</span><span class="mf">0.610322</span>     <span class="o">-</span><span class="mf">0.892884</span>     <span class="o">-</span><span class="mf">0.847370</span>   
+                <span class="mi">50</span><span class="o">%</span>     <span class="mf">84551.000000</span>      <span class="mf">0.031139</span>      <span class="mf">0.051775</span>      <span class="mf">0.178943</span>     <span class="o">-</span><span class="mf">0.017692</span>   
+                <span class="mi">75</span><span class="o">%</span>    <span class="mf">139392.000000</span>      <span class="mf">1.320048</span>      <span class="mf">0.792685</span>      <span class="mf">1.035197</span>      <span class="mf">0.737312</span>   
+                <span class="nb">max</span>    <span class="mf">172784.000000</span>      <span class="mf">2.411499</span>     <span class="mf">17.418649</span>      <span class="mf">4.069865</span>     <span class="mf">16.715537</span>   
+                
+                                 <span class="n">V5</span>            <span class="n">V6</span>            <span class="n">V7</span>            <span class="n">V8</span>            <span class="n">V9</span>  \
+                <span class="n">count</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>   
+                <span class="n">mean</span>      <span class="o">-</span><span class="mf">0.015666</span>      <span class="mf">0.003634</span>     <span class="o">-</span><span class="mf">0.008523</span>     <span class="o">-</span><span class="mf">0.003040</span>      <span class="mf">0.014536</span>   
+                <span class="n">std</span>        <span class="mf">1.395552</span>      <span class="mf">1.334985</span>      <span class="mf">1.237249</span>      <span class="mf">1.204102</span>      <span class="mf">1.098006</span>   
+                <span class="nb">min</span>      <span class="o">-</span><span class="mf">42.147898</span>    <span class="o">-</span><span class="mf">19.996349</span>    <span class="o">-</span><span class="mf">22.291962</span>    <span class="o">-</span><span class="mf">33.785407</span>     <span class="o">-</span><span class="mf">8.739670</span>   
+                <span class="mi">25</span><span class="o">%</span>       <span class="o">-</span><span class="mf">0.703986</span>     <span class="o">-</span><span class="mf">0.765807</span>     <span class="o">-</span><span class="mf">0.562033</span>     <span class="o">-</span><span class="mf">0.208445</span>     <span class="o">-</span><span class="mf">0.632488</span>   
+                <span class="mi">50</span><span class="o">%</span>       <span class="o">-</span><span class="mf">0.068037</span>     <span class="o">-</span><span class="mf">0.269071</span>      <span class="mf">0.028378</span>      <span class="mf">0.024696</span>     <span class="o">-</span><span class="mf">0.037100</span>   
+                <span class="mi">75</span><span class="o">%</span>        <span class="mf">0.603574</span>      <span class="mf">0.398839</span>      <span class="mf">0.559428</span>      <span class="mf">0.326057</span>      <span class="mf">0.621093</span>   
+                <span class="nb">max</span>       <span class="mf">28.762671</span>     <span class="mf">22.529298</span>     <span class="mf">36.677268</span>     <span class="mf">19.587773</span>      <span class="mf">8.141560</span>   
+                
+                           <span class="o">...</span>                <span class="n">V21</span>           <span class="n">V22</span>           <span class="n">V23</span>           <span class="n">V24</span>  \
+                <span class="n">count</span>      <span class="o">...</span>       <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>   
+                <span class="n">mean</span>       <span class="o">...</span>           <span class="mf">0.004740</span>      <span class="mf">0.006719</span>     <span class="o">-</span><span class="mf">0.000494</span>     <span class="o">-</span><span class="mf">0.002626</span>   
+                <span class="n">std</span>        <span class="o">...</span>           <span class="mf">0.744743</span>      <span class="mf">0.728209</span>      <span class="mf">0.645945</span>      <span class="mf">0.603968</span>   
+                <span class="nb">min</span>        <span class="o">...</span>         <span class="o">-</span><span class="mf">16.640785</span>    <span class="o">-</span><span class="mf">10.933144</span>    <span class="o">-</span><span class="mf">30.269720</span>     <span class="o">-</span><span class="mf">2.752263</span>   
+                <span class="mi">25</span><span class="o">%</span>        <span class="o">...</span>          <span class="o">-</span><span class="mf">0.224842</span>     <span class="o">-</span><span class="mf">0.535877</span>     <span class="o">-</span><span class="mf">0.163047</span>     <span class="o">-</span><span class="mf">0.360582</span>   
+                <span class="mi">50</span><span class="o">%</span>        <span class="o">...</span>          <span class="o">-</span><span class="mf">0.029075</span>      <span class="mf">0.014337</span>     <span class="o">-</span><span class="mf">0.012678</span>      <span class="mf">0.038383</span>   
+                <span class="mi">75</span><span class="o">%</span>        <span class="o">...</span>           <span class="mf">0.189068</span>      <span class="mf">0.533936</span>      <span class="mf">0.148065</span>      <span class="mf">0.434851</span>   
+                <span class="nb">max</span>        <span class="o">...</span>          <span class="mf">22.588989</span>      <span class="mf">6.090514</span>     <span class="mf">15.626067</span>      <span class="mf">3.944520</span>   
+                
+                                <span class="n">V25</span>           <span class="n">V26</span>           <span class="n">V27</span>           <span class="n">V28</span>        <span class="n">Amount</span>  \
+                <span class="n">count</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>  <span class="mf">28481.000000</span>   
+                <span class="n">mean</span>      <span class="o">-</span><span class="mf">0.000917</span>      <span class="mf">0.004762</span>     <span class="o">-</span><span class="mf">0.001689</span>     <span class="o">-</span><span class="mf">0.004154</span>     <span class="mf">89.957884</span>   
+                <span class="n">std</span>        <span class="mf">0.520679</span>      <span class="mf">0.488171</span>      <span class="mf">0.418304</span>      <span class="mf">0.321646</span>    <span class="mf">270.894630</span>   
+                <span class="nb">min</span>       <span class="o">-</span><span class="mf">7.025783</span>     <span class="o">-</span><span class="mf">2.534330</span>     <span class="o">-</span><span class="mf">8.260909</span>     <span class="o">-</span><span class="mf">9.617915</span>      <span class="mf">0.000000</span>   
+                <span class="mi">25</span><span class="o">%</span>       <span class="o">-</span><span class="mf">0.319611</span>     <span class="o">-</span><span class="mf">0.328476</span>     <span class="o">-</span><span class="mf">0.071712</span>     <span class="o">-</span><span class="mf">0.053379</span>      <span class="mf">5.980000</span>   
+                <span class="mi">50</span><span class="o">%</span>        <span class="mf">0.015231</span>     <span class="o">-</span><span class="mf">0.049750</span>      <span class="mf">0.000914</span>      <span class="mf">0.010753</span>     <span class="mf">22.350000</span>   
+                <span class="mi">75</span><span class="o">%</span>        <span class="mf">0.351466</span>      <span class="mf">0.253580</span>      <span class="mf">0.090329</span>      <span class="mf">0.076267</span>     <span class="mf">78.930000</span>   
+                <span class="nb">max</span>        <span class="mf">5.541598</span>      <span class="mf">3.118588</span>     <span class="mf">11.135740</span>     <span class="mf">15.373170</span>  <span class="mf">19656.530000</span>   
+                
+                              <span class="n">Class</span>  
+                <span class="n">count</span>  <span class="mf">28481.000000</span>  
+                <span class="n">mean</span>       <span class="mf">0.001720</span>  
+                <span class="n">std</span>        <span class="mf">0.041443</span>  
+                <span class="nb">min</span>        <span class="mf">0.000000</span>  
+                <span class="mi">25</span><span class="o">%</span>        <span class="mf">0.000000</span>  
+                <span class="mi">50</span><span class="o">%</span>        <span class="mf">0.000000</span>  
+                <span class="mi">75</span><span class="o">%</span>        <span class="mf">0.000000</span>  
+                <span class="nb">max</span>        <span class="mf">1.000000</span>  
+                
+                
+                <span class="c1"># Plot histograms of each parameter 
+                </span><span class="n">data</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                <p style="overflow-x: scroll;"><img src="https://sravanroy.github.io/images/credit_fraud/hist.png" alt="alt"></p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Determine number of fraud cases in dataset
+                </span>
+                <span class="n">Fraud</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">'Class'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">Valid</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">'Class'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+                
+                <span class="n">outlier_fraction</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Fraud</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Valid</span><span class="p">))</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">outlier_fraction</span><span class="p">)</span>
+                
+                <span class="k">print</span><span class="p">(</span><span class="s">'Fraud Cases: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">'Class'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">'Valid Transactions: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">'Class'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])))</span>
+                
+                <span class="mf">0.00172341024198</span>
+                <span class="n">Fraud</span> <span class="n">Cases</span><span class="p">:</span> <span class="mi">49</span>
+                <span class="n">Valid</span> <span class="n">Transactions</span><span class="p">:</span> <span class="mi">28432</span>
+                
+                <span class="c1"># Correlation matrix to see correlation between variables
+                </span><span class="n">corrmat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+                
+                <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corrmat</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">.8</span><span class="p">,</span> <span class="n">square</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                
+                <p style="overflow-x: scroll;"><img src="https://sravanroy.github.io/images/credit_fraud/corr.png" alt="alt"></p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Get all the columns from the dataFrame
+                </span><span class="n">columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                
+                <span class="c1"># Filter the columns to remove data we do not want
+                </span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"Class"</span><span class="p">]]</span>
+                
+                <span class="c1"># Store the variable we'll be predicting on
+                </span><span class="n">target</span> <span class="o">=</span> <span class="s">"Class"</span>
+                
+                <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+                <span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+                
+                <span class="c1"># Print shapes
+                </span><span class="k">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                
+                <span class="p">(</span><span class="mi">28481</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+                <span class="p">(</span><span class="il">28481L</span><span class="p">,)</span>
+                </code></pre></div></div>
+                <h2 id="3-unsupervised-outlier-detection">3. Unsupervised Outlier Detection</h2>
+                
+                <p>Now that we have processed our data, we can begin deploying our machine learning algorithms.  We will use the following techniques:</p>
+                
+                <p><strong>Local Outlier Factor (LOF)</strong></p>
+                
+                <p>The anomaly score of each sample is called Local Outlier Factor. It measures the local deviation of density of a 
+                given sample with respect to its neighbors. It is local in that the anomaly score depends on how isolated the 
+                object is with respect to the surrounding neighborhood.</p>
+                
+                <p><strong>Isolation Forest Algorithm</strong></p>
+                
+                <p>The IsolationForest ‘isolates’ observations by randomly selecting a feature and then randomly selecting 
+                a split value between the maximum and minimum values of the selected feature.</p>
+                
+                <p>Since recursive partitioning can be represented by a tree structure, the number of splittings required to 
+                isolate a sample is equivalent to the path length from the root node to the terminating node.</p>
+                
+                <p>This path length, averaged over a forest of such random trees, is a measure of normality and our decision function.</p>
+                
+                <p>Random partitioning produces noticeably shorter paths for anomalies. Hence, when a forest of random trees 
+                collectively produce shorter path lengths for particular samples, they are highly likely to be anomalies.</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">accuracy_score</span>
+                <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">IsolationForest</span>
+                <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">LocalOutlierFactor</span>
+                
+                <span class="c1"># define random states
+                </span><span class="n">state</span> <span class="o">=</span> <span class="mi">1</span>
+                
+                <span class="c1"># define outlier detection tools to be compared
+                </span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">"Isolation Forest"</span><span class="p">:</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">max_samples</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span>
+                                                        <span class="n">contamination</span><span class="o">=</span><span class="n">outlier_fraction</span><span class="p">,</span>
+                                                        <span class="n">random_state</span><span class="o">=</span><span class="n">state</span><span class="p">),</span>
+                    <span class="s">"Local Outlier Factor"</span><span class="p">:</span> <span class="n">LocalOutlierFactor</span><span class="p">(</span>
+                        <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                        <span class="n">contamination</span><span class="o">=</span><span class="n">outlier_fraction</span><span class="p">)}</span>
+                
+                        
+                <span class="c1"># Fit the model
+                </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+                <span class="n">n_outliers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Fraud</span><span class="p">)</span>
+                
+                
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">clf_name</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classifiers</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                    
+                    <span class="c1"># fit the data and tag outliers
+                </span>    <span class="k">if</span> <span class="n">clf_name</span> <span class="o">==</span> <span class="s">"Local Outlier Factor"</span><span class="p">:</span>
+                        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+                        <span class="n">scores_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">negative_outlier_factor_</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+                        <span class="n">scores_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+                        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+                    
+                    <span class="c1"># Reshape the prediction values to 0 for valid, 1 for fraud. 
+                </span>    <span class="n">y_pred</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">y_pred</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    
+                    <span class="n">n_errors</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pred</span> <span class="o">!=</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="nb">sum</span><span class="p">()</span> <span class="c1"># calculate the nummber of errors
+                </span>    
+                    <span class="c1"># Run classification metrics
+                </span>    <span class="k">print</span><span class="p">(</span><span class="s">'{}: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">clf_name</span><span class="p">,</span> <span class="n">n_errors</span><span class="p">))</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+                
+                    
+                <span class="n">Local</span> <span class="n">Outlier</span> <span class="n">Factor</span><span class="p">:</span> <span class="mi">97</span>
+                <span class="mf">0.9965942207085425</span>
+                             <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+                
+                          <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">1.00</span>      <span class="mf">1.00</span>     <span class="mi">28432</span>
+                          <span class="mi">1</span>       <span class="mf">0.02</span>      <span class="mf">0.02</span>      <span class="mf">0.02</span>        <span class="mi">49</span>
+                
+                <span class="n">avg</span> <span class="o">/</span> <span class="n">total</span>       <span class="mf">1.00</span>      <span class="mf">1.00</span>      <span class="mf">1.00</span>     <span class="mi">28481</span>
+                
+                <span class="n">Isolation</span> <span class="n">Forest</span><span class="p">:</span> <span class="mi">71</span>
+                <span class="mf">0.99750711000316</span>
+                             <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+                
+                          <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">1.00</span>      <span class="mf">1.00</span>     <span class="mi">28432</span>
+                          <span class="mi">1</span>       <span class="mf">0.28</span>      <span class="mf">0.29</span>      <span class="mf">0.28</span>        <span class="mi">49</span>
+                
+                <span class="n">avg</span> <span class="o">/</span> <span class="n">total</span>       <span class="mf">1.00</span>      <span class="mf">1.00</span>      <span class="mf">1.00</span>     <span class="mi">28481</span>
+                </code></pre></div></div>
+                
+                <ul>
+                  <li><h4>Even though the accracy is high, both the models fail to correctly predict the fraud cases with Isolation Forest showing a better precision and recall</h4></li>
+                  <li><h4>The scope extends to implementing more models and reducing the training variables and increasing the training data</h4></li>
+                </ul>
+                
+                
+                        
+                      
+        </div>
+    </section>
+ 
+    
+{% endblock %}

@@ -1,0 +1,367 @@
+{% extends "nav2.html" %}
+{% block content %}
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/dna3.jpg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                <h1 class="centered" style="color: white !important;"><strong>DNA CLASSIFICATION</strong></h1>
+            </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+        <ul>
+          <li><h4>The DNA data set is obtained from the UCI repository</h4></li>
+          <li><h4>Several Machine Learning models were implemented to predict the class of the gene (promoter and non-promoter)</h4></li>
+          <li><h4>Used 10 fold cross validation on train sets and studied different relevant accuracy metrics for determing the best model</h4></li>
+        </ul>
+        
+        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="kn">import</span> <span class="nn">sklearn</span>
+        
+        </code></pre></div></div>
+        <h2 id="importing-dataset-and-preprocessing-it">Importing dataset and preprocessing it</h2>
+        
+        <div class="language-python highlighter-rouge text-justify"><div class="highlight"><pre class="highlight"><code><span class="c1"># import uci molecular biology data set
+        </span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s">'https://archive.ics.uci.edu/ml/machine-learning-databases/molecular-biology/promoter-gene-sequences/promoters.data'</span>
+        
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Class'</span><span class="p">,</span> <span class="s">'id'</span><span class="p">,</span> <span class="s">'Sequence'</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span> <span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
+        
+        <span class="c1"># build the class dataset using a custom pandas dataframe
+        </span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s">'Class'</span><span class="p">]</span>
+        
+        <span class="c1"># generate list of DNA sequences
+        </span><span class="n">sequences</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s">'Sequence'</span><span class="p">])</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># loop through the sequences and split into individual nucleotides
+        </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sequences</span><span class="p">):</span>
+            
+            <span class="c1">#split and remove tabs
+        </span>    <span class="n">nucl</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+            <span class="n">nucl</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nucl</span> <span class="k">if</span> <span class="n">x</span><span class="o">!=</span> <span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">]</span>
+            
+            <span class="c1"># append class asssignment
+        </span>    <span class="n">nucl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            
+            <span class="c1"># add to dataset
+        </span>    <span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nucl</span>
+        
+        <span class="n">dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        
+        <span class="c1"># transpose the DataFrame
+        </span><span class="n">df</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        
+        <span class="c1"># rename the last column to class
+        </span><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="mi">57</span><span class="p">:</span><span class="s">'Class'</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+        
+        <span class="c1"># record value counts for each sequence
+        </span>
+        <span class="n">series</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+        
+        <span class="n">info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        
+        <span class="c1"># switch to numerical data using pd.getdummies()
+        </span>
+        <span class="n">numerical_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        
+        <span class="c1"># remove one of the class columns and rename to simply 'Class'
+        </span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">numerical_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Class_-'</span><span class="p">])</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Class_+'</span><span class="p">:</span><span class="s">'Class'</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+        
+        </code></pre></div></div>
+        
+        <h2 id="building-machine-learning-algorithms">Building Machine Learning algorithms</h2>
+        
+        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="c1"># import the algorithms
+        </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+        <span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+        <span class="kn">from</span> <span class="nn">sklearn.gaussian_process</span> <span class="kn">import</span> <span class="n">GaussianProcessClassifier</span>
+        <span class="kn">from</span> <span class="nn">sklearn.gaussian_process.kernels</span> <span class="kn">import</span> <span class="n">RBF</span>
+        <span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+        <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">AdaBoostClassifier</span>
+        <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
+        <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+        <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">accuracy_score</span>
+        
+        <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+        
+        <span class="c1"># create X and Y datasets for training
+        </span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Class'</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Class'</span><span class="p">])</span>
+        
+        <span class="c1"># define a seed for reproducibility
+        </span><span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span>
+        
+        <span class="c1"># split the data into training and testing datasets
+        </span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        
+        <span class="c1"># define scoring method
+        </span><span class="n">scoring</span> <span class="o">=</span> <span class="s">'accuracy'</span>
+        
+        <span class="c1"># Define models to train
+        </span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"Nearest Neighbors"</span><span class="p">,</span> <span class="s">"Gaussian Process"</span><span class="p">,</span>
+                 <span class="s">"Decision Tree"</span><span class="p">,</span> <span class="s">"Random Forest"</span><span class="p">,</span> <span class="s">"Neural Net"</span><span class="p">,</span> <span class="s">"AdaBoost"</span><span class="p">,</span>
+                 <span class="s">"Naive Bayes"</span><span class="p">,</span> <span class="s">"SVM Linear"</span><span class="p">,</span> <span class="s">"SVM RBF"</span><span class="p">,</span> <span class="s">"SVM Sigmoid"</span><span class="p">]</span>
+        
+        
+        <span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span>
+            
+            <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="n">GaussianProcessClassifier</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">RBF</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span> <span class="o">=</span> <span class="mi">5</span><span class="p">),</span>
+            <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">max_depth</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>  <span class="n">n_estimators</span> <span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_features</span> <span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">AdaBoostClassifier</span><span class="p">(),</span>
+            <span class="n">GaussianNB</span><span class="p">(),</span>
+            <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span> <span class="o">=</span> <span class="s">'linear'</span><span class="p">),</span>
+            <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span> <span class="o">=</span> <span class="s">'rbf'</span><span class="p">),</span>
+            <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span> <span class="o">=</span> <span class="s">'sigmoid'</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="n">models</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">classifiers</span><span class="p">)</span>
+        
+        <span class="c1"># evaluate each models in turn
+        </span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+            <span class="n">kfold</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">cv_results</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span> <span class="o">=</span> <span class="n">kfold</span><span class="p">,</span> <span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cv_results</span><span class="p">)</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">'{0}: {1} ({2})'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cv_results</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">cv_results</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Validating on test data set"</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Validation Accuracy"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Confusion Matrix/n"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+        
+        
+        </code></pre></div></div>
+        <h2 id="results">Results</h2>
+        
+        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Nearest</span> <span class="n">Neighbors</span><span class="p">:</span> <span class="mf">0.8232142857142858</span> <span class="p">(</span><span class="mf">0.11390841738440759</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.78</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.65</span>      <span class="mf">0.79</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.62</span>      <span class="mf">1.00</span>      <span class="mf">0.77</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.78</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.81</span>      <span class="mf">0.82</span>      <span class="mf">0.78</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.86</span>      <span class="mf">0.78</span>      <span class="mf">0.78</span>        <span class="mi">27</span>
+        
+        <span class="n">Gaussian</span> <span class="n">Process</span><span class="p">:</span> <span class="mf">0.8732142857142857</span> <span class="p">(</span><span class="mf">0.05615780426255853</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.89</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.82</span>      <span class="mf">0.90</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.77</span>      <span class="mf">1.00</span>      <span class="mf">0.87</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.89</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.88</span>      <span class="mf">0.91</span>      <span class="mf">0.89</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.91</span>      <span class="mf">0.89</span>      <span class="mf">0.89</span>        <span class="mi">27</span>
+        
+        <span class="n">Decision</span> <span class="n">Tree</span><span class="p">:</span> <span class="mf">0.7107142857142856</span> <span class="p">(</span><span class="mf">0.15685850897141249</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.74</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.59</span>      <span class="mf">0.74</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.59</span>      <span class="mf">1.00</span>      <span class="mf">0.74</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.74</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.79</span>      <span class="mf">0.79</span>      <span class="mf">0.74</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.85</span>      <span class="mf">0.74</span>      <span class="mf">0.74</span>        <span class="mi">27</span>
+        
+        <span class="n">Random</span> <span class="n">Forest</span><span class="p">:</span> <span class="mf">0.6178571428571429</span> <span class="p">(</span><span class="mf">0.12142857142857144</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.48</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">0.71</span>      <span class="mf">0.29</span>      <span class="mf">0.42</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.40</span>      <span class="mf">0.80</span>      <span class="mf">0.53</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.48</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.56</span>      <span class="mf">0.55</span>      <span class="mf">0.47</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.60</span>      <span class="mf">0.48</span>      <span class="mf">0.46</span>        <span class="mi">27</span>
+        
+        
+        <span class="n">Neural</span> <span class="n">Net</span><span class="p">:</span> <span class="mf">0.875</span> <span class="p">(</span><span class="mf">0.09682458365518543</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.93</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.88</span>      <span class="mf">0.94</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.83</span>      <span class="mf">1.00</span>      <span class="mf">0.91</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.93</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.92</span>      <span class="mf">0.94</span>      <span class="mf">0.92</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.94</span>      <span class="mf">0.93</span>      <span class="mf">0.93</span>        <span class="mi">27</span>
+        
+        
+        <span class="n">AdaBoost</span><span class="p">:</span> <span class="mf">0.925</span> <span class="p">(</span><span class="mf">0.11456439237389601</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.85</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.76</span>      <span class="mf">0.87</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.71</span>      <span class="mf">1.00</span>      <span class="mf">0.83</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.85</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.86</span>      <span class="mf">0.88</span>      <span class="mf">0.85</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.89</span>      <span class="mf">0.85</span>      <span class="mf">0.85</span>        <span class="mi">27</span>
+        
+        <span class="n">Naive</span> <span class="n">Bayes</span><span class="p">:</span> <span class="mf">0.8375</span> <span class="p">(</span><span class="mf">0.1375</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.93</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.88</span>      <span class="mf">0.94</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.83</span>      <span class="mf">1.00</span>      <span class="mf">0.91</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.93</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.92</span>      <span class="mf">0.94</span>      <span class="mf">0.92</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.94</span>      <span class="mf">0.93</span>      <span class="mf">0.93</span>        <span class="mi">27</span>
+        
+        <span class="n">SVM</span> <span class="n">Linear</span><span class="p">:</span> <span class="mf">0.85</span> <span class="p">(</span><span class="mf">0.10897247358851683</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.96</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.94</span>      <span class="mf">0.97</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.91</span>      <span class="mf">1.00</span>      <span class="mf">0.95</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.96</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.95</span>      <span class="mf">0.97</span>      <span class="mf">0.96</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.97</span>      <span class="mf">0.96</span>      <span class="mf">0.96</span>        <span class="mi">27</span>
+        
+        <span class="n">SVM</span> <span class="n">RBF</span><span class="p">:</span> <span class="mf">0.7375</span> <span class="p">(</span><span class="mf">0.11792476415070755</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.78</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.65</span>      <span class="mf">0.79</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.62</span>      <span class="mf">1.00</span>      <span class="mf">0.77</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.78</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.81</span>      <span class="mf">0.82</span>      <span class="mf">0.78</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.86</span>      <span class="mf">0.78</span>      <span class="mf">0.78</span>        <span class="mi">27</span>
+        
+        <span class="n">SVM</span> <span class="n">Sigmoid</span><span class="p">:</span> <span class="mf">0.5696428571428571</span> <span class="p">(</span><span class="mf">0.1592092225048921</span><span class="p">)</span>
+        <span class="n">Validating</span> <span class="n">on</span> <span class="n">test</span> <span class="n">data</span> <span class="nb">set</span>
+        <span class="n">Validation</span> <span class="n">Accuracy</span>
+        <span class="mf">0.44</span>
+        <span class="n">Confusion</span> <span class="n">Matrix</span><span class="o">/</span><span class="n">n</span>
+                      <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+        
+                   <span class="mi">0</span>       <span class="mf">1.00</span>      <span class="mf">0.12</span>      <span class="mf">0.21</span>        <span class="mi">17</span>
+                   <span class="mi">1</span>       <span class="mf">0.40</span>      <span class="mf">1.00</span>      <span class="mf">0.57</span>        <span class="mi">10</span>
+        
+            <span class="n">accuracy</span>                           <span class="mf">0.44</span>        <span class="mi">27</span>
+           <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.70</span>      <span class="mf">0.56</span>      <span class="mf">0.39</span>        <span class="mi">27</span>
+        <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.78</span>      <span class="mf">0.44</span>      <span class="mf">0.34</span>        <span class="mi">27</span>
+        
+        </code></pre></div></div>
+        
+        <ul>
+          <li>The results can be interpreted well by considering the business problem at hand and determing the best metric to pick the model!</li>
+        </ul>
+        
+        
+    </div>
+              </section>
+
+</div>        </section>
+        </div>
+ 
+    
+        
+ 
+    
+{% endblock %}

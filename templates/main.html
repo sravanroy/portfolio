@@ -1,0 +1,309 @@
+    {% extends "nav.html" %}
+    {% block content %}  
+    <div class="jumbotron jumbotron1" style="text-align: center; vertical-align: middle;">
+            <div class="container">
+                
+                    <h1 style="font-size:50px" class="centered"><strong data-shrink-original-size="30" style="letter-spacing: 0.0666667em;">SRAVAN ROY'S</strong><br>PORTFOLIO</h1><br>
+                    <a href="#projects" class = "nounderline" data-scroll><button class="btn btn-warning jumbotron-btn centered" data-shrink-original-size="30" style="position:absolute;top:70%;letter-spacing: 0.0666667em;">PROJECTS</button></a>
+                    
+                
+            </div>
+        
+        </div>
+ <!-- Team -->
+<section id="projects" class="pb-5">
+        <div class="container">
+            <h5 class="section-title h1">PROJECTS</h5>
+            <div class="row">
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/dna.png') }}" alt="card image"></p>
+                                        <h4 class="card-title">DNA CLASSIFICATION</h4>
+                                        <!-- <p class="card-text">Neural networks are transforming the way we study DNA and population genetics</p> -->
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">DNA CLASSIFICATION</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p>   <a href="{{ url_for('dna_classification_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                            <!-- <button type="button" class="btn btn-warning btn-lg" style='margin-right:16px; margin-top: 16px;'>ANALYSIS</button>
+                                            <button type="button" class="btn btn-primary btn-lg" style='margin-right:16px; margin-top: 16px;'>DEMO</button></p> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/stock.jpeg') }}" alt="card image"></p>
+                                        <h4 class="card-title">Stock Market Clustering</h4>
+                                        <p class="card-text"></p>
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">Stock Market Clustering</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p><a href="{{ url_for('stock_market_clustering_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/minst.png') }}" alt="card image"></p>
+                                        <h4 class="card-title">Predicting digits in MNIST database</h4>
+                                        <p class="card-text"></p>
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">Predicting digits in MNIST database</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p> <a href="{{ url_for('mnist_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/breastcancer.jpeg') }}" alt="card image"></p>
+                                        <h4 class="card-title">Breast Cancer Detection</h4>
+                                        <p class="card-text"></p>
+                                       <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">Breast Cancer Detection</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p> <a href="{{ url_for('breastcancer_prediction_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/board.jpg') }}" alt="card image"></p>
+                                        <h4 class="card-title">Board Game Review Prediction</h4>
+                                        <p class="card-text"></p>
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">Board Game Review Prediction</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p> <a href="{{ url_for('board_game_review_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                        <div class="mainflip">
+                            <div class="frontside">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <p><img class=" img-fluid" src="{{ url_for('static', filename='img/stock.jpeg') }}" alt="card image"></p>
+                                        <h4 class="card-title">Credit Fraud Detection</h4>
+                                        <p class="card-text"></p>
+                                       <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside">
+                                <div class="card">
+                                    <div class="card-body text-center mt-4">
+                                        <h4 class="card-title">Credit Fraud Detection</h4>
+                                        <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                            </p><a href="{{ url_for('credit_fraud_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./Team member -->
+                <!-- Team member -->
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                            <div class="mainflip">
+                                <div class="frontside">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <p><img class=" img-fluid" src="{{ url_for('static', filename='img/maskcnn.jpeg') }}" alt="card image"></p>
+                                            <h4 class="card-title">Implementation of Mask R-CNN architecture on a custom dataset</h4>
+                                            <p class="card-text"></p>
+                                            <i class="fa fa-plus"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="backside">
+                                    <div class="card">
+                                        <div class="card-body text-center mt-4">
+                                            <h4 class="card-title ">Implementation of Mask R-CNN architecture on a custom dataset</h4>
+                                            <p class="card-text text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ullam, quibusdam perferendis odit iure accusamus voluptates quas aliquam voluptatibus? Error animi ea sint labore minima doloribus, optio quo incidunt perferendis.
+                                                    </p>
+                                                    <a href="{{ url_for('mask_cnn_rnn_project') }}"><button type="button" class="btn btn-info btn-lg" style="margin-right:16px; margin-top: 16px;">View Project</button></a>
+ 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./Team member -->
+    
+            </div>
+        </div>
+    </section>
+    <!-- Team -->
+
+
+
+    <section id="">
+            <div >
+              <div >
+                
+              </div>
+            </div>
+          </section>
+        
+          <section id="about">
+                <h5 class="section-title h1">ABOUT ME</h5>
+                <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h1 style="margin-left:10%;">
+                                    DATA SCIENTIST
+                                </h1>
+                                <p style="margin-top: 1px;"></p>
+                                <p class= "text-justify" style=" max-width: 600px; margin-left: 10%;">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In nobis error aliquid distinctio asperiores dolor cupiditate, est sint nisi eius recusandae aspernatur impedit voluptatum possimus, modi delectus eveniet necessitatibus quibusdam!
+                                    <br>
+                                    <br>
+                                    If you would like to see the code for all of the projects on this website, I've included my Github
+                                    below. Also, feel free to connect with me at LinkedIn as well. Thank you for looking through my site.
+                                </p>
+                    
+                                <p style="margin-left: 13em;">
+                                    <a href="https://github.com/sravanroy">
+                                        <img src="{{url_for('static', filename='../static/img/github.svg')}}" class="img-rounded"
+                                            style="padding: 0 10px; float: left; height: 60px; width: 60px;">
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/sravan-roy">
+                                        <img src="{{url_for('static', filename='../static/img/linkedin.svg')}}" class="img-rounded"
+                                        style="padding: 0 10px; float: left; height: 60px; width: 60px;"> <br><br>
+                                    </a>
+                                </p>
+                    
+                                <br>
+                                <br>
+                            </div>
+                            <div class="col-md-8">
+                                <p style="margin-top: 2% ">
+                                    <img src="{{url_for('static', filename='../static/img/hero.jpg')}}"                                                        hero.jpg') }}" alt="hero"
+                                        class="img-rounded center-block"
+                                        style = "max-height: 30em"> </p>
+                    
+                            </div>
+                    
+                        </div>
+                    </div>
+          </section>
+        
+            <!--/ Section Services Star /-->
+          <section id="blog" class="">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="title-box text-center">
+                        <h3 class="title-a">
+                          FOLLOW ME ON
+                        </h3>
+                        <p class="subtitle-a">
+                          so and so site
+                        </p>
+                        <div class="line-mf"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      
+                    </div>
+                    <div class="col-md-4">
+                      
+                    </div>
+                    <div class="col-md-4">
+                      
+                    </div>
+                    <div class="col-md-4">
+                      
+                    </div>
+                    <div class="col-md-4">
+                     
+                </div>
+              </section>
+              <!--/ Section Services End /-->
+        
+  {% endblock %}

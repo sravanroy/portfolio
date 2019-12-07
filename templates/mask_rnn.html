@@ -1,0 +1,180 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/maskrcnn.jpg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                    <h1 class="centered" style="color: white !important;"><strong>IMPLEMENTATION OF MASK R-CNN ARCHITECTURE ON A CUSTOM DATASET</strong></h1>
+                </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+
+                <h2 id="detecting-objects-and-generating-boundary-boxes-for-custom-images-using-mask-rcnn-model"><em>Detecting objects and generating boundary boxes for custom images using Mask RCNN model!</em></h2>
+                <hr>
+                <ul>
+                  <li><h4>First, let’s clone the mask rcnn repository which has the architecture for Mask R-CNN from this <a href="https://github.com/matterport/Mask_RCNN.git">link</a></li>
+                  <li><h4>Next, we need to download the pretrained weights using this <a href="https://github.com/matterport/Mask_RCNN/releases">link</a></h4></li>
+                  <li><h4>Finally, we will use the Mask R-CNN architecture and the pretrained weights to generate predictions for our own images</h4></li>
+                </ul>
+                
+                <p>The required packages are imported into the python notebook as shown-</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+                <span class="kn">import</span> <span class="nn">sys</span>
+                <span class="kn">import</span> <span class="nn">random</span>
+                <span class="kn">import</span> <span class="nn">math</span>
+                <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+                <span class="kn">import</span> <span class="nn">skimage.io</span>
+                <span class="kn">import</span> <span class="nn">matplotlib</span>
+                <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                
+                <span class="kn">import</span> <span class="nn">coco</span>
+                <span class="kn">import</span> <span class="nn">utils</span>
+                <span class="kn">import</span> <span class="nn">model</span> <span class="k">as</span> <span class="n">modellib</span>
+                <span class="kn">import</span> <span class="nn">visualize</span>
+                </code></pre></div></div>
+                
+                <p>Set the root directory and load the trained weights file</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Root directory of the project
+                </span><span class="n">ROOT_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+                
+                <span class="n">Next</span><span class="p">,</span> <span class="n">we</span> <span class="n">will</span> <span class="n">define</span> <span class="n">the</span> <span class="n">path</span> <span class="k">for</span> <span class="n">the</span> <span class="n">pretrained</span> <span class="n">weights</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">images</span> <span class="n">on</span> <span class="n">which</span> <span class="n">we</span> <span class="n">would</span> <span class="n">like</span> <span class="n">to</span> <span class="n">perform</span> <span class="n">segmentation</span><span class="p">:</span>
+                
+                <span class="c1"># Directory to save logs and trained model
+                </span><span class="n">MODEL_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">,</span> <span class="s">"logs"</span><span class="p">)</span>
+                
+                <span class="c1"># Local path to trained weights file
+                </span><span class="n">COCO_MODEL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">,</span> <span class="s">"mask_rcnn_coco.h5"</span><span class="p">)</span>
+                <span class="c1"># Download COCO trained weights from Releases if needed
+                </span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">COCO_MODEL_PATH</span><span class="p">):</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">download_trained_weights</span><span class="p">(</span><span class="n">COCO_MODEL_PATH</span><span class="p">)</span>
+                
+                <span class="c1"># Path to Shapes trained weights
+                </span><span class="n">SHAPES_MODEL_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">,</span> <span class="s">"mask_rcnn_shapes.h5"</span><span class="p">)</span>
+                </code></pre></div></div>
+                
+                <p>Load the validation dataset</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Build validation dataset
+                </span><span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">NAME</span> <span class="o">==</span> <span class="s">'shapes'</span><span class="p">:</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="n">ShapesDataset</span><span class="p">()</span>
+                    <span class="n">dataset</span><span class="o">.</span><span class="n">load_shapes</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">IMAGE_SHAPE</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">config</span><span class="o">.</span><span class="n">IMAGE_SHAPE</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">NAME</span> <span class="o">==</span> <span class="s">"coco"</span><span class="p">:</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">coco</span><span class="o">.</span><span class="n">CocoDataset</span><span class="p">()</span>
+                    <span class="n">dataset</span><span class="o">.</span><span class="n">load_coco</span><span class="p">(</span><span class="n">COCO_DIR</span><span class="p">,</span> <span class="s">"minival"</span><span class="p">)</span>
+                
+                <span class="c1"># Must call before using the dataset
+                </span><span class="n">dataset</span><span class="o">.</span><span class="n">prepare</span><span class="p">()</span>
+                
+                <span class="k">print</span><span class="p">(</span><span class="s">"Images: {}</span><span class="se">\n</span><span class="s">Classes: {}"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">image_ids</span><span class="p">),</span> <span class="n">dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">))</span>
+                
+                <span class="n">loading</span> <span class="n">annotations</span> <span class="n">into</span> <span class="n">memory</span><span class="o">...</span>
+                <span class="n">Done</span> <span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mf">4.86</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">creating</span> <span class="n">index</span><span class="o">...</span>
+                <span class="n">index</span> <span class="n">created</span><span class="err">!</span>
+                <span class="n">Images</span><span class="p">:</span> <span class="mi">35185</span>
+                <span class="n">Classes</span><span class="p">:</span> <span class="p">[</span><span class="s">'BG'</span><span class="p">,</span> <span class="s">'person'</span><span class="p">,</span> <span class="s">'bicycle'</span><span class="p">,</span> <span class="s">'car'</span><span class="p">,</span> <span class="s">'motorcycle'</span><span class="p">,</span> <span class="s">'airplane'</span><span class="p">,</span> <span class="s">'bus'</span><span class="p">,</span> <span class="s">'train'</span><span class="p">,</span> <span class="s">'truck'</span><span class="p">,</span> <span class="s">'boat'</span><span class="p">,</span> <span class="s">'traffic light'</span><span class="p">,</span> <span class="s">'fire hydrant'</span><span class="p">,</span> <span class="s">'stop sign'</span><span class="p">,</span> <span class="s">'parking meter'</span><span class="p">,</span> <span class="s">'bench'</span><span class="p">,</span> <span class="s">'bird'</span><span class="p">,</span> <span class="s">'cat'</span><span class="p">,</span> <span class="s">'dog'</span><span class="p">,</span> <span class="s">'horse'</span><span class="p">,</span> <span class="s">'sheep'</span><span class="p">,</span> <span class="s">'cow'</span><span class="p">,</span> <span class="s">'elephant'</span><span class="p">,</span> <span class="s">'bear'</span><span class="p">,</span> <span class="s">'zebra'</span><span class="p">,</span> <span class="s">'giraffe'</span><span class="p">,</span> <span class="s">'backpack'</span><span class="p">,</span> <span class="s">'umbrella'</span><span class="p">,</span> <span class="s">'handbag'</span><span class="p">,</span> <span class="s">'tie'</span><span class="p">,</span> <span class="s">'suitcase'</span><span class="p">,</span> <span class="s">'frisbee'</span><span class="p">,</span> <span class="s">'skis'</span><span class="p">,</span> <span class="s">'snowboard'</span><span class="p">,</span> <span class="s">'sports ball'</span><span class="p">,</span> <span class="s">'kite'</span><span class="p">,</span> <span class="s">'baseball bat'</span><span class="p">,</span> <span class="s">'baseball glove'</span><span class="p">,</span> <span class="s">'skateboard'</span><span class="p">,</span> <span class="s">'surfboard'</span><span class="p">,</span> <span class="s">'tennis racket'</span><span class="p">,</span> <span class="s">'bottle'</span><span class="p">,</span> <span class="s">'wine glass'</span><span class="p">,</span> <span class="s">'cup'</span><span class="p">,</span> <span class="s">'fork'</span><span class="p">,</span> <span class="s">'knife'</span><span class="p">,</span> <span class="s">'spoon'</span><span class="p">,</span> <span class="s">'bowl'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">,</span> <span class="s">'apple'</span><span class="p">,</span> <span class="s">'sandwich'</span><span class="p">,</span> <span class="s">'orange'</span><span class="p">,</span> <span class="s">'broccoli'</span><span class="p">,</span> <span class="s">'carrot'</span><span class="p">,</span> <span class="s">'hot dog'</span><span class="p">,</span> <span class="s">'pizza'</span><span class="p">,</span> <span class="s">'donut'</span><span class="p">,</span> <span class="s">'cake'</span><span class="p">,</span> <span class="s">'chair'</span><span class="p">,</span> <span class="s">'couch'</span><span class="p">,</span> <span class="s">'potted plant'</span><span class="p">,</span> <span class="s">'bed'</span><span class="p">,</span> <span class="s">'dining table'</span><span class="p">,</span> <span class="s">'toilet'</span><span class="p">,</span> <span class="s">'tv'</span><span class="p">,</span> <span class="s">'laptop'</span><span class="p">,</span> <span class="s">'mouse'</span><span class="p">,</span> <span class="s">'remote'</span><span class="p">,</span> <span class="s">'keyboard'</span><span class="p">,</span> <span class="s">'cell phone'</span><span class="p">,</span> <span class="s">'microwave'</span><span class="p">,</span> <span class="s">'oven'</span><span class="p">,</span> <span class="s">'toaster'</span><span class="p">,</span> <span class="s">'sink'</span><span class="p">,</span> <span class="s">'refrigerator'</span><span class="p">,</span> <span class="s">'book'</span><span class="p">,</span> <span class="s">'clock'</span><span class="p">,</span> <span class="s">'vase'</span><span class="p">,</span> <span class="s">'scissors'</span><span class="p">,</span> <span class="s">'teddy bear'</span><span class="p">,</span> <span class="s">'hair drier'</span><span class="p">,</span> <span class="s">'toothbrush'</span><span class="p">]</span>
+                
+                </code></pre></div></div>
+                <p>Next, we will create our model and load the pretrained weights which we downloaded earlier</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Create model in inference mode
+                </span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">):</span>
+                    <span class="n">model</span> <span class="o">=</span> <span class="n">modellib</span><span class="o">.</span><span class="n">MaskRCNN</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">"inference"</span><span class="p">,</span> <span class="n">model_dir</span><span class="o">=</span><span class="n">MODEL_DIR</span><span class="p">,</span>
+                                              <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+                
+                <span class="c1"># Set weights file path
+                </span><span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">NAME</span> <span class="o">==</span> <span class="s">"shapes"</span><span class="p">:</span>
+                    <span class="n">weights_path</span> <span class="o">=</span> <span class="n">SHAPES_MODEL_PATH</span>
+                <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">NAME</span> <span class="o">==</span> <span class="s">"coco"</span><span class="p">:</span>
+                    <span class="n">weights_path</span> <span class="o">=</span> <span class="n">COCO_MODEL_PATH</span>
+                <span class="c1"># Or, uncomment to load the last model you trained
+                # weights_path = model.find_last()[1]
+                </span>
+                <span class="c1"># Load weights
+                </span><span class="k">print</span><span class="p">(</span><span class="s">"Loading weights "</span><span class="p">,</span> <span class="n">weights_path</span><span class="p">)</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">weights_path</span><span class="p">,</span> <span class="n">by_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                </code></pre></div></div>
+                <p>Run the model on our custom images</p>
+                
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load a random image from the images folder
+                </span><span class="n">file_names</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">IMAGE_DIR</span><span class="p">))[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">IMAGE_DIR</span><span class="p">,</span><span class="s">'sr2.JPG'</span><span class="p">)</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                
+                <span class="c1"># Run detection
+                </span><span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">detect</span><span class="p">([</span><span class="n">image</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                
+                <span class="c1"># Visualize results
+                </span><span class="n">r</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">visualize</span><span class="o">.</span><span class="n">display_instances</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="s">'rois'</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">'masks'</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">'class_ids'</span><span class="p">],</span> 
+                                            <span class="n">class_names</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="s">'scores'</span><span class="p">])</span>
+                </code></pre></div></div>
+                <p><strong>Here is the result!!</strong></p>
+                
+                <p>Random image of mine:
+                <img src="https://sravanroy.github.io/images/sheep.jpg" alt="alt"></p>
+                
+                <p>Detected person and sheeps in the image :
+                <img src="https://sravanroy.github.io/images/sheepml.png" alt="alt"></p>
+                
+                <p><em>The scope extends to capturing objects and generating boxes in a live video using algorithms like OpenCV in Python</em></p>
+                
+                
+                        
+                      
+        
+        </div>
+    </section>
+    
+    
+{% endblock %}

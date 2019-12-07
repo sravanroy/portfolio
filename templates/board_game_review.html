@@ -1,0 +1,181 @@
+{% extends "nav2.html" %}
+{% block content %}
+
+<div>
+        <div class="jumbotron" style="background-image:url(../static/img/board1.jpg); background-size: cover; height: 400px">
+            <!-- <img src="{{url_for('static', filename='airbnb3.png') }}" alt="airbnb" class="img-rounded center-block"
+                style="width: 400px; height: auto; margin-top: 5%">
+            <br> -->
+            <div class="center-here text-center">
+                    <h1 class="centered" style="color: white !important;"><strong>BOARD GAME REVIEW PREDICTION</strong></h1>
+                </div>
+        </div>
+
+        
+
+        <section id = "problem">
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                <div class="about center-here">
+                <h2>
+                    Problem
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+                </h4>
+                
+                <br>
+                <h2>
+                    Solution
+                </h2>
+                <h4 class="text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus laboriosam officia numquam similique sunt sit eveniet nostrum ipsam nam sed perferendis magnam, eius saepe exercitationem alias assumenda nulla at voluptatum.
+                </h4>
+            </div>
+    </div>        </section>
+
+
+    <section id = "analysis">
+            <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+            <div class="about center-here">
+            <h2>
+                ANALYSIS
+            </h2>
+            <h4 class="text-justify">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quod reprehenderit, praesentium ullam sapiente amet corrupti iste molestiae dignissimos impedit esse reiciendis dolore, illo voluptas ducimus inventore eum ipsam quos?
+            </h4>
+            
+        </div>
+</div>        </section>
+
+       
+
+        <section id = "code" class="page__content" itemprop="text">
+
+                <div class="content container.fluid" style="margin-left: 20%; margin-right: 20%;font-size: 15px; padding-bottom: 5em;">
+                        <div class="about center-here">
+                        <h2>
+                            CODE
+                        </h2>
+                        <br>
+        <div class="container text-justify">
+                <h2 id="this-is-a-simple-board-game-review-predictor-using-machine-learning-models-"><em>This is a simple board game review predictor using machine learning models !</em></h2>
+                <ul>
+                  <li><h4>A <a href="https://github.com/sravanroy/sravanroy.github.io/tree/master/datasets/board_game_predictor/games.csv">dataset</a> of over 80,000 games is used to train both a linear regressor and a random forest regressor</h4></li>
+                  <li><h4>Reviews for a game are then predicted based on significant features in the dataset</h4></li>
+                  <li><h4>The models were implemented in Python Jupyter notebook</h4></li>
+                </ul>
+                
+                <p>The required packages are imported into the notebook as shown-</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">sys</span>
+                  <span class="kn">import</span> <span class="nn">pandas</span>
+                  <span class="kn">import</span> <span class="nn">matplotlib</span>
+                  <span class="kn">import</span> <span class="nn">seaborn</span>
+                  <span class="kn">import</span> <span class="nn">sklearn</span> 
+                  <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+                  <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+                  <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+                  <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+                </code></pre></div></div>
+                <p>Now the games <a href="https://github.com/sravanroy/sravanroy.github.io/tree/master/datasets/board_game_predictor/games.csv">dataset</a> is loaded into the environment</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">games</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"games.csv"</span><span class="p">)</span>
+                  <span class="k">print</span><span class="p">(</span><span class="n">games</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                </code></pre></div></div>
+                
+                <p>(81312, 20)</p>
+                
+                <p>A histogram of all the ratings in the <strong>average_rating</strong> column is plotted, which is the dependent target variable that needs to be predicted</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">games</span><span class="p">[</span><span class="s">"average_rating"</span><span class="p">])</span>
+                 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+                </code></pre></div></div>
+                <p><img src="https://sravanroy.github.io/images/board_game/hist1.png" alt="alt"></p>
+                
+                <p>Since most of the ratings are <em>zero</em>, the game parameters with rating greater than zero are compared against those with zero rating</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">#print(games[games["average_rating"]==0].iloc[0])
+                </span>  <span class="c1">#print(games[games["average_rating"]&gt;0].iloc[0])
+                </span></code></pre></div></div>
+                
+                <p>As most of the data doesn’t have any ratings by users, the data is cleaned to remove all the rows without any <strong>users_rated</strong> and also dropped the missing values</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">games</span> <span class="o">=</span> <span class="n">games</span><span class="p">[</span><span class="n">games</span><span class="p">[</span><span class="s">"users_rated"</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">games</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                
+                <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">games</span><span class="p">[</span><span class="s">"average_rating"</span><span class="p">])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                </code></pre></div></div>
+                <p><img src="https://sravanroy.github.io/images/board_game/hist2.png" alt="alt"></p>
+                
+                <p>Correlation between the game parameters are used for training the models on only key parameters to prevent overfitting</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">corrmat</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+                
+                <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corrmat</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">.8</span><span class="p">,</span> <span class="n">square</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+                </code></pre></div></div>
+                <p><img src="https://sravanroy.github.io/images/board_game/heatmap.png" alt="alt"></p>
+                
+                <p>The data is filtered for only significant columns which are used to train the models and the <strong>average_rating</strong> column is set as target variable</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">columns</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                
+                <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"bayes_avearge_rating"</span><span class="p">,</span><span class="s">"average_rating"</span><span class="p">,</span><span class="s">"type"</span><span class="p">,</span><span class="s">"name"</span><span class="p">,</span><span class="s">"id"</span><span class="p">]]</span>
+                
+                <span class="n">target</span> <span class="o">=</span> <span class="s">"average_rating"</span> 
+                </code></pre></div></div>
+                <p>Create the training and test data sets with 80% train data and 20% test data</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+                
+                <span class="n">train</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span> <span class="o">=</span>  <span class="mf">0.8</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+                
+                <span class="n">test</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">games</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+                </code></pre></div></div>
+                <p>Import the linear regression model and fit the model to the training data</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import linear regression model
+                </span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+                <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+                
+                <span class="c1"># Initialize the model class
+                </span><span class="n">LR</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+                
+                <span class="c1"># Fit the model on training data 
+                </span><span class="n">LR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">columns</span><span class="p">],</span><span class="n">train</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+                </code></pre></div></div>
+                <p>Generate predictions for the test set and compute the error between test predictors and actual values</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Generate predictions for the test set
+                </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">LR</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">columns</span><span class="p">])</span>
+                
+                <span class="c1"># Compute error between our test predictors and actual values
+                </span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">test</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+                
+                <span class="mf">2.078987486472881</span>
+                </code></pre></div></div>
+                <p>The linear regressor is not the best fit on this data, given the complexity and number of rows in it.
+                Now, a non-linear random forest regression model is implemented in the same way to measure the mean square error</p>
+                <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import the random forest model
+                </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span>  <span class="n">RandomForestRegressor</span>
+                
+                <span class="c1"># Initialize the model
+                </span><span class="n">RFR</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">min_samples_leaf</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+                
+                <span class="c1"># Fit to the data
+                </span><span class="n">RFR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">columns</span><span class="p">],</span><span class="n">train</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+                <span class="c1"># make predictions
+                </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">RFR</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">columns</span><span class="p">])</span>
+                
+                <span class="c1"># compute the error between our test predictors and actual values
+                </span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span><span class="n">test</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+                
+                <span class="mf">1.3991311439483058</span>
+                </code></pre></div></div>
+                <p>The error is much lower when compared to the previous linear model.
+                In this case, a random forest model is best fitted for making review predictions of the board games</p>
+                
+                <h3 id="wrapping-up">Wrapping up</h3>
+                
+                <ul>
+                  <li><em>The scope extends to using further non-linear regressors which might have a better accuracy of prediction</em></li>
+                  <li><em>This prediction information comes to handy if we wanted to know the kind of games people liked and get more higher ratings !</em></li>
+                </ul>
+                
+                
+                        
+                      
+        </div>
+    </section>
+{% endblock %}
